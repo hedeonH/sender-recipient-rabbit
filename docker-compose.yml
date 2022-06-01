@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+
+  micro-sender:
+    build:
+      context: docker-micro-sender
+      dockerfile: Dockerfile
+    image: micro-sender:latest
+    networks:
+      - sender
+    ports:
+      - "8083:8083"
+
+  micro-collector:
+    build:
+      context: docker-micro-collector
+      dockerfile: Dockerfile
+    image: micro-collector:latest
+    networks:
+      - recipient
+    ports:
+      - "8084:8084"
+
+  micro-recipient:
+    build:
+      context: docker-micro-recipient
+      dockerfile: Dockerfile
+    image: micro-recipient:latest
+    networks:
+      - recipient
+    ports:
+      - "8085:8085"
+
+  rabbitmq:
+    image: rabbitmq:3.10-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - sender
+      - recipient
+
+networks:
+  sender:
+    driver: bridge
+  recipient:
+    driver: bridge
