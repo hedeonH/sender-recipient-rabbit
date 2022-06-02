@@ -1,9 +1,11 @@
 package mentoring.microsender.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
-public class Notification {
+@ToString
+public class Notification{
 
     private String user;
 

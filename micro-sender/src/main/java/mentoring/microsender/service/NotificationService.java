@@ -1,5 +1,7 @@
 package mentoring.microsender.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import mentoring.microsender.model.Notification;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -22,8 +24,11 @@ public class NotificationService {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendMessage(Notification notification) {
+    public void sendMessage(Notification notification) throws JsonProcessingException {
         log.info("Sending a message {} to topic {} and queue {}", notification, topic, queueName);
-        rabbitTemplate.convertAndSend(topic, "notification.sender", notification);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        rabbitTemplate.convertAndSend(topic, "notification.sender", objectMapper.writeValueAsString(notification));
+        log.info("Message sent to a rabbitmq");
     }
 }
