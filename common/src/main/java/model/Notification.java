@@ -1,4 +1,4 @@
-package mentoring.microrecipient.model;
+package model;
 
 import lombok.Data;
 
