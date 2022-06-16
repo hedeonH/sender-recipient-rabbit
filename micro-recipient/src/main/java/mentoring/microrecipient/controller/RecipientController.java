@@ -25,6 +25,8 @@ public class RecipientController {
     @GetMapping
     public ResponseEntity<List<Notification>> getNotifications() {
         log.info("Message controller");
-        return new ResponseEntity<>(storageService.getNotifications(), HttpStatus.OK);
+        var a = new ResponseEntity<>(storageService.getNotifications(), HttpStatus.OK);
+        storageService.resetStorage();
+        return a;
     }
 }

@@ -12,9 +12,11 @@ public class StorageService {
     private static final List<Notification> internalStorage = new ArrayList<>();
 
     public List<Notification> getNotifications(){
-        List<Notification> list = List.copyOf(internalStorage);
+        return List.copyOf(internalStorage);
+    }
+
+    public void resetStorage(){
         internalStorage.clear();
-        return list;
     }
 
     public  void addNotification(Notification notification){
