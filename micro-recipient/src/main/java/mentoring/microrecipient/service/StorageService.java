@@ -1,21 +1,23 @@
-package mentoring.microrecipient.model;
+package mentoring.microrecipient.service;
+
+import model.Notification;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Storage {
-
-    private Storage(){}
+@Service
+public class StorageService {
 
     private static final List<Notification> internalStorage = new ArrayList<>();
 
-    public static List<Notification> getNotifications(){
+    public List<Notification> getNotifications(){
         List<Notification> list = List.copyOf(internalStorage);
         internalStorage.clear();
         return list;
     }
 
-    public static void addNotification(Notification notification){
+    public  void addNotification(Notification notification){
         internalStorage.add(notification);
     }
 }

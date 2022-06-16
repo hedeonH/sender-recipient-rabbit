@@ -5,13 +5,12 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 
 @Configuration
 @EnableScheduling
@@ -40,17 +39,12 @@ public class RabbitMQConfig {
 
     @Bean
     SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-                                             MessageListenerAdapter listenerAdapter) {
+                                             NotificationReceiver notificationReceiver) {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(queueName);
-        container.setMessageListener(listenerAdapter);
+        container.setMessageListener(notificationReceiver);
         return container;
-    }
-
-    @Bean
-    MessageListenerAdapter listenerAdapter(NotificationReceiver receiver) {
-        return new MessageListenerAdapter(receiver, "receiveMessage");
     }
 
 }

@@ -1,21 +1,37 @@
 package mentoring.microrecipient.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import mentoring.microrecipient.model.Storage;
-import mentoring.microrecipient.model.Notification;
+import model.Notification;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageListener;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 
 @Component
 @Slf4j
-public class NotificationReceiver {
+public class NotificationReceiver implements MessageListener {
 
-    public void receiveMessage(String message) throws JsonProcessingException {
-        log.info("Received <" + message + ">");
-        ObjectMapper objectMapper = new ObjectMapper();
-        Storage.addNotification(objectMapper.readValue(message, Notification.class));
+    private final ObjectMapper objectMapper;
+
+    private final StorageService storageService;
+
+    public NotificationReceiver(ObjectMapper objectMapper, StorageService storageService) {
+        this.objectMapper = objectMapper;
+        this.storageService = storageService;
+    }
+
+    @Override
+    public void onMessage(Message message) {
+        log.info("Received <" + Arrays.toString(message.getBody()) + ">");
+        try {
+            storageService.addNotification(objectMapper.readValue(message.getBody(), Notification.class));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
