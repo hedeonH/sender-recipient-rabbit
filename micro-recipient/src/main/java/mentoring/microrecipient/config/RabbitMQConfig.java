@@ -1,7 +1,6 @@
 package mentoring.microrecipient.config;
 
 import mentoring.microrecipient.service.NotificationReceiver;
-import model.RabbitConfigurationProperties;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;

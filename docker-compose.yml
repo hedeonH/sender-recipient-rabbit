@@ -4,7 +4,7 @@ services:
 
   micro-sender:
     build:
-      context: docker-micro-sender
+      context: micro-sender
       dockerfile: Dockerfile
     image: micro-sender:latest
     networks:
@@ -14,7 +14,7 @@ services:
 
   micro-collector:
     build:
-      context: docker-micro-collector
+      context: micro-collector
       dockerfile: Dockerfile
     image: micro-collector:latest
     networks:
@@ -24,7 +24,7 @@ services:
 
   micro-recipient:
     build:
-      context: docker-micro-recipient
+      context: micro-recipient
       dockerfile: Dockerfile
     image: micro-recipient:latest
     networks:
@@ -40,6 +40,27 @@ services:
     networks:
       - sender
       - recipient
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - recipient
+      - sender
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/:/etc/prometheus/
+    command:
+      - "--config.file=prometheus.yml"
+      - "--storage.tsdb.path=/"
+    networks:
+      - recipient
+      - sender
 
 networks:
   sender:

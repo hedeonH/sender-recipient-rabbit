@@ -15,7 +15,7 @@ public class LoggingService {
     @Value("${receiver.url}")
     private String receiverEndpoint;
 
-    @Scheduled(cron = "*/5 * * * *")
+    @Scheduled(cron = "5 * * * * *")
     public void getNotifications(){
 
         RestTemplate restTemplate = new RestTemplate();
