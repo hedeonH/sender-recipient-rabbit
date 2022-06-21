@@ -1,5 +1,11 @@
 version: '3.9'
 
+volumes:
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+
 services:
 
   micro-sender:
@@ -45,9 +51,12 @@ services:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
     networks:
       - recipient
       - sender
+    restart: unless-stopped
 
   prometheus:
     image: prom/prometheus:latest
