@@ -8,9 +8,9 @@ scrape_configs:
       - targets: ["localhost:9090"]
 
   - job_name: "sender_app"
-    metrics_path: /actuator/prometheus
+    metrics_path: "/actuator/prometheus"
     # Override global settings
     scrape_interval: 5s
 
     static_configs:
-      - targets: ["localhost:8083","localhost:8084","localhost:8085"]
+      - targets: ["micro-sender:8083","micro-collector:8084","micro-recipient:8085"]
